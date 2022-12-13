@@ -62,7 +62,7 @@ int main(int argc,char *argv[])
         quotient = bmpInfo.biHeight / thread_nb;
         remainder = bmpInfo.biHeight % thread_nb; // If the thread number is less than remainder, the calculate will plus one
         displs = (int*)malloc(sizeof(int) * thread_nb);
-        pthread_t *thread_handles = malloc(thread_nb * sizeof(pthread_t));
+        pthread_t *thread_handles = (pthread_t*)malloc(thread_nb * sizeof(pthread_t));
         for(int i = 0; i < thread_nb; i++){
                 displs[i] = 0;
         }
