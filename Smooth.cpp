@@ -24,6 +24,10 @@ BMPHEADER bmpHeader;
 BMPINFO bmpInfo;
 RGBTRIPLE **BMPSaveData = NULL;                                               
 RGBTRIPLE **BMPData = NULL;
+int quotient = 0;
+int remainder = 0;
+int *displs;
+long thread_nb = 0;
 
 /*********************************************************/
 /*��ƫŧi�G                                             */
@@ -38,10 +42,7 @@ void swap(RGBTRIPLE *a, RGBTRIPLE *b);
 RGBTRIPLE **alloc_memory( int Y, int X );        //allocate memory
 void *Calculate(void *rank);
 
-int quotient = 0;
-int remainder = 0;
-int *displs;
-long thread_nb = 0;
+
 
 int main(int argc,char *argv[])
 {
@@ -234,15 +235,15 @@ void swap(RGBTRIPLE *a, RGBTRIPLE *b)
 
 void *Calculate(void *rank){ 
         //�i��h�������ƹB��
-        int my_rank = (int)rank;
-        int begin = displs[my_rank];
+        int *my_rank = (int*)rank;
+        int begin = displs[*my_rank];
         int end = 0;
-        if(my_rank < remainder)
+        if(*my_rank < remainder)
                 end = begin + quotient + 1;
         else
                 end = begin + quotient;
         int counter[2];
-        pthead_mutex_t mutex;
+        pthread_mutex_t mutex;
         for(int count = 0; count < NSmooth; count++){
 		//�i�業�ƹB��
                 swap(BMPSaveData, BMPData);
